@@ -79,14 +79,12 @@ const objectProxyHandler = {
     return Reflect.has(node.value, prop);
   },
 
-  set(): boolean {
-    if (DEBUG) {
-      throw new Error(
-        'You attempted to set a value on the Redux store directly. This is not allowed, you must use `dispatch` to send an action which updates the state of the store.'
-      );
-    }
+  set(node: Node, key: PropertyKey, value: unknown): boolean {
+    return Reflect.set(node.value, key, value);
+  },
 
-    return false;
+  getPrototypeOf(node: Node): object | null {
+    return Reflect.getPrototypeOf(node.value);
   },
 };
 
@@ -117,15 +115,15 @@ const arrayProxyHandler = {
     [node]: [Node],
     prop: string | symbol
   ): PropertyDescriptor | undefined {
-    return objectProxyHandler.getOwnPropertyDescriptor(node, prop);
+    return Reflect.getOwnPropertyDescriptor(node.value, prop);
   },
 
   has([node]: [Node], prop: string | symbol): boolean {
-    return objectProxyHandler.has(node, prop);
+    return Reflect.has(node.value, prop);
   },
 
-  set(): boolean {
-    return objectProxyHandler.set();
+  set([node]: [Node], key: PropertyKey, value: unknown): boolean {
+    return Reflect.set(node.value, key, value);
   },
 };
 

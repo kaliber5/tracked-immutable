@@ -23,7 +23,7 @@ function createCache(fn) {
   return cache;
 }
 
-module('Unit | basic', () => {
+module('Unit | basic', function () {
   module('primitive root', () => {
     test('it throws for simple values', function (assert) {
       class TestClass {
@@ -36,7 +36,7 @@ module('Unit | basic', () => {
     });
   });
 
-  module('object root', () => {
+  module('object root', function () {
     module('object behavior', function () {
       test('is an array', function (assert) {
         class TestClass {
@@ -181,7 +181,7 @@ module('Unit | basic', () => {
     });
   });
 
-  module('array root', () => {
+  module('array root', function () {
     module('array behavior', function () {
       test('is an array', function (assert) {
         class TestClass {
@@ -315,7 +315,253 @@ module('Unit | basic', () => {
     });
   });
 
-  module('nested values', () => {
+  module('class root', function () {
+    module('class behavior', function () {
+      test('is a class', function (assert) {
+        class SubClass {}
+
+        class TestClass {
+          @immutableTracked
+          value = new SubClass();
+        }
+
+        const instance = new TestClass();
+
+        assert.strictEqual(typeof instance.value, 'object');
+        assert.true(instance.value instanceof SubClass);
+      });
+
+      test('supports simple properties', function (assert) {
+        class SubClass {
+          foo = 1;
+        }
+
+        window.sub = new SubClass();
+        class TestClass {
+          @immutableTracked
+          value = window.sub;
+        }
+
+        const instance = new TestClass();
+
+        assert.strictEqual(instance.value.foo, 1);
+
+        instance.value.foo = 2;
+        assert.strictEqual(instance.value.foo, 2);
+      });
+
+      test('supports getters', function (assert) {
+        class SubClass {
+          _foo = 1;
+          get foo() {
+            return this._foo;
+          }
+        }
+
+        class TestClass {
+          @immutableTracked
+          value = new SubClass();
+        }
+
+        const instance = new TestClass();
+
+        assert.strictEqual(instance.value.foo, 1);
+      });
+
+      test('supports setters', function (assert) {
+        class SubClass {
+          _foo = 1;
+          get foo() {
+            return this._foo;
+          }
+          set foo(value) {
+            this._foo = value;
+          }
+        }
+
+        class TestClass {
+          @immutableTracked
+          value = new SubClass();
+        }
+
+        const instance = new TestClass();
+        instance.value.foo = 2;
+
+        assert.strictEqual(instance.value.foo, 2);
+      });
+
+      test('supports methods', function (assert) {
+        let calledArgs;
+        let calledThis;
+        class SubClass {
+          called = false;
+          foo(...args) {
+            calledArgs = args;
+            calledThis = this;
+            this.called = true;
+          }
+        }
+
+        class TestClass {
+          @immutableTracked
+          value = new SubClass();
+        }
+
+        const instance = new TestClass();
+        instance.value.foo(123, true, null);
+
+        assert.deepEqual(calledThis, instance.value);
+        assert.deepEqual(calledArgs, [123, true, null]);
+        assert.true(instance.value.called);
+      });
+    });
+    module('reactivity', function () {
+      test('class instance updates correctly, does not invalidate cache', function (assert) {
+        class SubClass {
+          static = 123;
+          count = 1;
+        }
+        class TestClass {
+          @immutableTracked
+          value = new SubClass();
+        }
+
+        const instance = new TestClass();
+        const cache = createCache(() => instance.value);
+
+        assert.strictEqual(
+          getValue(cache).static,
+          123,
+          'initial value is correct'
+        );
+        assert.strictEqual(
+          getValue(cache).count,
+          1,
+          'initial value is correct'
+        );
+        assert.strictEqual(callCount(cache), 1, 'cache call count correct');
+
+        const newValue = new SubClass();
+        newValue.count = 2;
+        instance.value = newValue;
+
+        assert.strictEqual(
+          getValue(cache).static,
+          123,
+          'initial value is correct'
+        );
+        assert.strictEqual(
+          getValue(cache).count,
+          2,
+          'initial value is correct'
+        );
+        assert.strictEqual(callCount(cache), 1, 'cache call count correct');
+      });
+
+      test('cache updates correctly if dynamic value used', function (assert) {
+        class SubClass {
+          static = 123;
+          count = 1;
+        }
+        class TestClass {
+          @immutableTracked
+          value = new SubClass();
+        }
+
+        const instance = new TestClass();
+        let cache = createCache(() => instance.value.count);
+
+        assert.deepEqual(getValue(cache), 1, 'initial value is correct');
+        assert.strictEqual(callCount(cache), 1, 'cache call count correct');
+
+        const newValue = new SubClass();
+        newValue.count = 2;
+        instance.value = newValue;
+
+        assert.deepEqual(getValue(cache), 2, 'changed value is correct');
+        assert.strictEqual(callCount(cache), 2, 'cache call count correct');
+      });
+
+      test('cache not invalidated if static value used', function (assert) {
+        class SubClass {
+          static = 123;
+          count = 1;
+        }
+        class TestClass {
+          @immutableTracked
+          value = new SubClass();
+        }
+
+        const instance = new TestClass();
+        let cache = createCache(() => instance.value.static);
+
+        assert.deepEqual(getValue(cache), 123, 'initial value is correct');
+        assert.strictEqual(callCount(cache), 1, 'cache call count correct');
+
+        const newValue = new SubClass();
+        newValue.count = 2;
+        instance.value = newValue;
+
+        assert.deepEqual(getValue(cache), 123, 'initial value is correct');
+        assert.strictEqual(callCount(cache), 1, 'cache call count correct');
+      });
+
+      test('cache invalidated correctly if collection used and keys changed', function (assert) {
+        class SubClass1 {
+          foo = 1;
+        }
+        class SubClass2 {
+          foo = 1;
+          bar = 1;
+        }
+        class TestClass {
+          @immutableTracked
+          value = new SubClass1();
+        }
+
+        const instance = new TestClass();
+        let cache = createCache(() => Object.keys(instance.value));
+
+        assert.deepEqual(getValue(cache), ['foo'], 'initial value is correct');
+        assert.strictEqual(callCount(cache), 1, 'cache call count correct');
+
+        instance.value = new SubClass2();
+
+        assert.deepEqual(
+          getValue(cache),
+          ['foo', 'bar'],
+          'initial value is correct'
+        );
+        assert.strictEqual(callCount(cache), 2, 'cache call count correct');
+      });
+
+      test('cache invalidated correctly if collection used and keys changed, same number of keys', function (assert) {
+        class SubClass1 {
+          foo = 1;
+        }
+        class SubClass2 {
+          bar = 1;
+        }
+        class TestClass {
+          @immutableTracked
+          value = new SubClass1();
+        }
+
+        const instance = new TestClass();
+        let cache = createCache(() => Object.keys(instance.value));
+
+        assert.deepEqual(getValue(cache), ['foo'], 'initial value is correct');
+        assert.strictEqual(callCount(cache), 1, 'cache call count correct');
+
+        instance.value = new SubClass2();
+
+        assert.deepEqual(getValue(cache), ['bar'], 'initial value is correct');
+        assert.strictEqual(callCount(cache), 2, 'cache call count correct');
+      });
+    });
+  });
+
+  module('nested values', function () {
     test('object updates correctly, does not invalidate cache', function (assert) {
       class TestClass {
         @immutableTracked
