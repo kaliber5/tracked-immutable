@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { immutableTracked } from 'ember-immutable-tracked';
+import { immutableTracked } from 'tracked-immutable';
 
 import { setupRenderingTest } from 'ember-qunit';
 import { module } from 'qunit';

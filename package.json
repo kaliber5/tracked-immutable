@@ -1,11 +1,11 @@
 {
-  "name": "ember-immutable-tracked",
+  "name": "tracked-immutable",
   "version": "0.0.0",
   "description": "Enable deep, deduped auto-tracking of immutable data.",
   "keywords": [
     "ember-addon"
   ],
-  "repository": "https://github.com/kaliber5/ember-immutable-tracked",
+  "repository": "https://github.com/kaliber5/tracked-immutable",
   "license": "MIT",
   "author": "Simon Ihmig <simon.ihmig@kaliber5.de>",
   "directories": {

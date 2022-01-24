@@ -1,4 +1,4 @@
-ember-immutable-tracked
+tracked-immutable
 ==============================================================================
 
 [Short description of the addon.]
@@ -16,7 +16,7 @@ Installation
 ------------------------------------------------------------------------------
 
 ```
-ember install ember-immutable-tracked
+ember install tracked-immutable
 ```
 
 

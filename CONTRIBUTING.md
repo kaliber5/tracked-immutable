@@ -3,7 +3,7 @@
 ## Installation
 
 * `git clone <repository-url>`
-* `cd ember-immutable-tracked`
+* `cd tracked-immutable`
 * `yarn install`
 
 ## Linting

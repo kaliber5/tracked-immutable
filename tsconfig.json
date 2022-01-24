@@ -28,16 +28,16 @@
         "tests/dummy/app/*",
         "app/*"
       ],
-      "ember-immutable-tracked": [
+      "tracked-immutable": [
         "addon"
       ],
-      "ember-immutable-tracked/*": [
+      "tracked-immutable/*": [
         "addon/*"
       ],
-      "ember-immutable-tracked/test-support": [
+      "tracked-immutable/test-support": [
         "addon-test-support"
       ],
-      "ember-immutable-tracked/test-support/*": [
+      "tracked-immutable/test-support/*": [
         "addon-test-support/*"
       ],
       "*": [

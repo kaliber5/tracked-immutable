@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { immutableTracked } from 'ember-immutable-tracked';
+import { immutableTracked } from 'tracked-immutable';
 import {
   createCache as _createCache,
   getValue,
