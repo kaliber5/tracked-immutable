@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { immutableTracked } from 'tracked-immutable';
+import { trackedImmutable } from 'tracked-immutable';
 import {
   createCache as _createCache,
   getValue,
@@ -27,7 +27,7 @@ module('Unit | basic', function () {
   module('primitive root', () => {
     test('it throws for simple values', function (assert) {
       class TestClass {
-        @immutableTracked
+        @trackedImmutable
         value;
       }
       const instance = new TestClass();
@@ -40,7 +40,7 @@ module('Unit | basic', function () {
     module('object behavior', function () {
       test('is an array', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = { foo: 0 };
         }
 
@@ -52,7 +52,7 @@ module('Unit | basic', function () {
 
       test('is iterable', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = { foo: 0, bar: 1 };
         }
 
@@ -63,7 +63,7 @@ module('Unit | basic', function () {
 
       test('supports Object methods', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = { foo: 0, bar: 1 };
         }
 
@@ -79,7 +79,7 @@ module('Unit | basic', function () {
     module('reactivity', function () {
       test('object updates correctly, does not invalidate cache', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = { static: 123, count: 1 };
         }
 
@@ -105,7 +105,7 @@ module('Unit | basic', function () {
 
       test('cache updates correctly if dynamic value used', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = { static: 123, count: 1 };
         }
 
@@ -123,7 +123,7 @@ module('Unit | basic', function () {
 
       test('cache not invalidated if static value used', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = { static: 123, count: 1 };
         }
 
@@ -141,7 +141,7 @@ module('Unit | basic', function () {
 
       test('cache invalidated correctly if collection used and keys changed', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = { foo: 1 };
         }
 
@@ -163,7 +163,7 @@ module('Unit | basic', function () {
 
       test('cache invalidated correctly if collection used and keys changed, same number of keys', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = { foo: 1 };
         }
 
@@ -185,7 +185,7 @@ module('Unit | basic', function () {
     module('array behavior', function () {
       test('is an array', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = [1];
         }
 
@@ -197,7 +197,7 @@ module('Unit | basic', function () {
 
       test('is iterable', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = [1, 2];
         }
 
@@ -208,7 +208,7 @@ module('Unit | basic', function () {
 
       test('supports Array methods', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = [1, 2];
         }
 
@@ -225,7 +225,7 @@ module('Unit | basic', function () {
     module('reactivity', function () {
       test('array updates correctly, does not invalidate cache', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = [1];
         }
 
@@ -243,7 +243,7 @@ module('Unit | basic', function () {
 
       test('cache updates correctly if dynamic value used', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = [1];
         }
 
@@ -261,7 +261,7 @@ module('Unit | basic', function () {
 
       test('cache not invalidated if static value used', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = [123, 1];
         }
 
@@ -279,7 +279,7 @@ module('Unit | basic', function () {
 
       test('cache invalidated correctly if iteration used and items added', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = [1];
         }
 
@@ -297,7 +297,7 @@ module('Unit | basic', function () {
 
       test('cache invalidated correctly if iteration used and items changed', function (assert) {
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = [1];
         }
 
@@ -321,7 +321,7 @@ module('Unit | basic', function () {
         class SubClass {}
 
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = new SubClass();
         }
 
@@ -338,7 +338,7 @@ module('Unit | basic', function () {
 
         window.sub = new SubClass();
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = window.sub;
         }
 
@@ -359,7 +359,7 @@ module('Unit | basic', function () {
         }
 
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = new SubClass();
         }
 
@@ -380,7 +380,7 @@ module('Unit | basic', function () {
         }
 
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = new SubClass();
         }
 
@@ -403,7 +403,7 @@ module('Unit | basic', function () {
         }
 
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = new SubClass();
         }
 
@@ -422,7 +422,7 @@ module('Unit | basic', function () {
           count = 1;
         }
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = new SubClass();
         }
 
@@ -464,7 +464,7 @@ module('Unit | basic', function () {
           count = 1;
         }
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = new SubClass();
         }
 
@@ -488,7 +488,7 @@ module('Unit | basic', function () {
           count = 1;
         }
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = new SubClass();
         }
 
@@ -515,7 +515,7 @@ module('Unit | basic', function () {
           bar = 1;
         }
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = new SubClass1();
         }
 
@@ -543,7 +543,7 @@ module('Unit | basic', function () {
           bar = 1;
         }
         class TestClass {
-          @immutableTracked
+          @trackedImmutable
           value = new SubClass1();
         }
 
@@ -564,7 +564,7 @@ module('Unit | basic', function () {
   module('nested values', function () {
     test('object updates correctly, does not invalidate cache', function (assert) {
       class TestClass {
-        @immutableTracked
+        @trackedImmutable
         value = { arr: [{ foo: 123 }] };
       }
 
@@ -590,7 +590,7 @@ module('Unit | basic', function () {
 
     test('cache updates correctly if dynamic value used', function (assert) {
       class TestClass {
-        @immutableTracked
+        @trackedImmutable
         value = { arr: [{ foo: 123 }] };
       }
 
@@ -608,7 +608,7 @@ module('Unit | basic', function () {
 
     test('cache not invalidated if static value used', function (assert) {
       class TestClass {
-        @immutableTracked
+        @trackedImmutable
         value = { arr: [{ foo: 123 }, { bar: 456 }] };
       }
 

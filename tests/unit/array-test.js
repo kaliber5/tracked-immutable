@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { immutableTracked } from 'tracked-immutable';
+import { trackedImmutable } from 'tracked-immutable';
 
 import { setupRenderingTest } from 'ember-qunit';
 import { module } from 'qunit';
@@ -38,7 +38,7 @@ module('Array reactivity', function (hooks) {
   eachReactivityTest(
     '{{each}} works with new items',
     class extends Component {
-      @immutableTracked
+      @trackedImmutable
       state = [0];
 
       get collection() {
@@ -54,7 +54,7 @@ module('Array reactivity', function (hooks) {
   eachReactivityTest(
     '{{each}} works when updating old items',
     class extends Component {
-      @immutableTracked
+      @trackedImmutable
       state = [0];
 
       get collection() {
@@ -70,7 +70,7 @@ module('Array reactivity', function (hooks) {
   eachInReactivityTest(
     '{{each-in}} works with new items',
     class extends Component {
-      @immutableTracked
+      @trackedImmutable
       state = [0];
 
       get collection() {
@@ -86,7 +86,7 @@ module('Array reactivity', function (hooks) {
   eachInReactivityTest(
     '{{each-in}} works when updating old items',
     class extends Component {
-      @immutableTracked
+      @trackedImmutable
       state = [0];
 
       get collection() {
@@ -104,7 +104,7 @@ module('Array reactivity', function (hooks) {
       reactivityTest(
         `${method} individual index`,
         class extends Component {
-          @immutableTracked
+          @trackedImmutable
           state = [0];
 
           get value() {
@@ -127,7 +127,7 @@ module('Array reactivity', function (hooks) {
     reactivityTest(
       `${method} collection`,
       class extends Component {
-        @immutableTracked
+        @trackedImmutable
         state = [0];
 
         get value() {

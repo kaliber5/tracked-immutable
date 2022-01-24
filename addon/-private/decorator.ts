@@ -6,12 +6,12 @@ function assertObjectOrArray(
   value: unknown
 ): asserts value is Array<unknown> | Record<string, unknown> {
   assert(
-    '@immutableTracked expects an object or array.',
+    '@trackedImmutable expects an object or array.',
     Array.isArray(value) || (typeof value === 'object' && value !== null)
   );
 }
 
-export function immutableTracked(
+export function trackedImmutable(
   this: unknown,
   _obj: object,
   _key: string | symbol,

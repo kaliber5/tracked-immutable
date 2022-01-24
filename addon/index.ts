@@ -1,2 +1,2 @@
 import './-private/devtools';
-export { immutableTracked } from './-private/decorator';
+export { trackedImmutable } from './-private/decorator';
