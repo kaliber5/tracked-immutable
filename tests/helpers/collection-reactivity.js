@@ -37,7 +37,7 @@ export function eachReactivityTest(desc, Klass) {
       )
     );
 
-    await render(hbs`<this.TestComponent/>`);
+    await render(hbs`{{component (ensure-safe-component this.TestComponent)}}`);
 
     compareResults(
       assert,
@@ -80,7 +80,7 @@ export function eachInReactivityTest(desc, Klass) {
       )
     );
 
-    await render(hbs`<this.TestComponent/>`);
+    await render(hbs`{{component (ensure-safe-component this.TestComponent)}}`);
 
     let { collection } = instance;
 

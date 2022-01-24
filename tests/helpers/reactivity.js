@@ -29,7 +29,7 @@ export function reactivityTest(desc, Klass, shouldUpdate = true) {
       )
     );
 
-    await render(hbs`<this.TestComponent/>`);
+    await render(hbs`{{component (ensure-safe-component this.TestComponent)}}`);
 
     assert.equal(count, 1);
 
